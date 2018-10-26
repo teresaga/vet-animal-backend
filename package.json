@@ -1,0 +1,14 @@
+{
+  "name": "vet-animal-backend",
+  "version": "1.0.0",
+  "description": "Api REST del proyecto de vet animal",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "Teresa Galaviz",
+  "license": "MIT",
+  "dependencies": {
+    "express": "^4.16.4"
+  }
+}
