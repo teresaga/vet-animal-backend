@@ -6,7 +6,9 @@ var bodyParser = require('body-parser');
 var app = express();
 
 // cargar rutas
-//var user_routes = require('./routes/user');
+var user_routes = require('./routes/user');
+var worker_routes = require('./routes/worker');
+var job_routes = require('./routes/job');
 //var animal_routes = require('./routes/animal');
 
 // middlewares de body-parser
@@ -24,13 +26,10 @@ app.use((req, res, next) => {
 });
 */
 // rutas base
-//app.use('/api', user_routes);
+app.use('/api', user_routes);
+app.use('/api', worker_routes);
+app.use('/api', job_routes);
 //app.use('/api', animal_routes);
-
-
-app.get('/test', (req, res) => {
-	res.status(200).send({message: "Este es el metodo test"});
-});
 
 
 module.exports = app;
