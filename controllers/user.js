@@ -89,30 +89,30 @@ function login(req, res){
         if(err){
             res.status(500).send({message: 'Error al comprobar el usuario'});
         }else{
-            if(user.status=='A'){
-                if(user){
-                    bcrypt.compare(password, user.password, (err, check) => {
-                        if(check){
-                            //Comparar y generar token
-                            if(params.gettoken){
-                                //devolver token jwt
-                                res.status(200).send({
-                                    token: jwt.createToken(user)
-                                });
-                            }else{
-                                res.status(200).send({user});
-                            }
-                            
+            if(user){
+                if(user.status=='A'){
+                bcrypt.compare(password, user.password, (err, check) => {
+                    if(check){
+                        //Comparar y generar token
+                        if(params.gettoken){
+                            //devolver token jwt
+                            res.status(200).send({
+                                token: jwt.createToken(user)
+                            });
                         }else{
-                            res.status(404).send({message: 'El usuario no ha podido loguearse correctamente'});
+                            res.status(200).send({user});
                         }
-                    });
-                    
+                        
+                    }else{
+                        res.status(404).send({message: 'El usuario no ha podido loguearse correctamente'});
+                    }
+                });
+                
                 }else{
-                    res.status(404).send({message: 'El usuario no ha podido loguearse'});
+                    res.status(404).send({message: 'El usuario ha sido dado de baja'});
                 }
             }else{
-                res.status(404).send({message: 'El usuario ha sido dado de baja'});
+                res.status(404).send({message: 'El usuario no ha podido loguearse'});
             }
         }
     });
