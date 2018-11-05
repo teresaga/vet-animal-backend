@@ -24,7 +24,7 @@ function saveWorker(req, res){
 
     var params = req.body;
 
-    if(params.name && params.paternal_surname && params.address && params.tel && params.age && params.salary && params.job && params.entry_horary && params.departure_horary){
+    if(params.name && params.paternal_surname && params.address && params.tel && params.email && params.age && params.salary && params.job && params.entry_horary && params.departure_horary){
         worker.name = params.name;
         worker.paternal_surname = params.paternal_surname;
 
@@ -36,6 +36,7 @@ function saveWorker(req, res){
         
         worker.address = params.address;
         worker.tel = params.tel;
+        worker.email = params.email;
         worker.age = params.age;
         worker.salary = params.salary;
         worker.job = params.job;
