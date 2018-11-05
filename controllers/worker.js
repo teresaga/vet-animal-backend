@@ -119,11 +119,11 @@ function activateWorker(req, res){
     Worker.findByIdAndUpdate(workerId, update, {new:true}, (err, workerUpdated) => {
         if(err){
             res.status(500).send({
-                message: 'Error al dar de baja al empleado'
+                message: 'Error al dar de alta al empleado'
             });
         }else{
             if(!workerUpdated){
-                res.status(404).send({message: 'No se ha dar de baja al empleado'});
+                res.status(404).send({message: 'No se ha dar de alta al empleado'});
             }else{
                 // Estatus 200 es para respuestas con exito
                 res.status(200).send({worker: workerUpdated});
