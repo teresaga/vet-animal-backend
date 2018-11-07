@@ -8,10 +8,10 @@ var api = express.Router();
 var md_auth = require('../middlewares/authenticated');
 
 api.get('/pruebas-empleado', md_auth.ensureAuth ,WorkerController.pruebas);
-api.post('/worker', WorkerController.saveWorker);
-api.put('/update-worker/:id', WorkerController.updateWorker);
-api.put('/deactivate-worker/:id', WorkerController.deactivateWorker);
-api.put('/activate-worker/:id', WorkerController.activateWorker);
+api.post('/worker', md_auth.ensureAuth ,WorkerController.saveWorker);
+api.put('/update-worker/:id', md_auth.ensureAuth, WorkerController.updateWorker);
+api.put('/deactivate-worker/:id', md_auth.ensureAuth, WorkerController.deactivateWorker);
+api.put('/activate-worker/:id', md_auth.ensureAuth, WorkerController.activateWorker);
 api.get('/workers', WorkerController.getWorkers);
 api.get('/worker/:id', WorkerController.getWorker);
 
