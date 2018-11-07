@@ -135,6 +135,20 @@ function getJobs(req, res){
     });      
 }
 
+function getJobsA(req, res){
+    Job.find({status:'A'}).exec((err, jobs) => {
+        if(err){
+            res.status(500).send({message: 'Error en la petición'});
+        }else{
+            if(!jobs){
+                res.status(404).send({message: 'No hay puestos'});
+            }else{
+                res.status(200).send({jobs});
+            }
+        }
+    });      
+}
+
 function getJob(req, res){
     var jobId = req.params.id;
 
@@ -154,6 +168,7 @@ function getJob(req, res){
 module.exports = {
     saveJob,
     updateJob,
+    getJobsA,
     deactivateJob,
     activateJob,
     getJobs,
