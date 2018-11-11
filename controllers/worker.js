@@ -68,6 +68,9 @@ function saveWorker(req, res){
 function updateWorker(req, res){
     var workerId =  req.params.id;
     var update = req.body;
+    delete update.start_date;
+    delete update.end_date;
+    delete update.status;
 
     Worker.findByIdAndUpdate(workerId, update, {new:true}, (err, workerUpdated) => {
         if(err){
