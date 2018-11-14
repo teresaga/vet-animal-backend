@@ -12,7 +12,7 @@ api.post('/worker', md_auth.ensureAuth ,WorkerController.saveWorker);
 api.put('/update-worker/:id', md_auth.ensureAuth, WorkerController.updateWorker);
 api.put('/deactivate-worker/:id', md_auth.ensureAuth, WorkerController.deactivateWorker);
 api.put('/activate-worker/:id', md_auth.ensureAuth, WorkerController.activateWorker);
-api.get('/workers', WorkerController.getWorkers);
+api.get('/workers', md_auth.ensureAuth, WorkerController.getWorkers);
 api.get('/worker/:id', WorkerController.getWorker);
 
 

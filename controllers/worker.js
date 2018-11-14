@@ -138,14 +138,31 @@ function activateWorker(req, res){
 }
 
 function getWorkers(req, res){
-    Worker.find({}).populate({path: 'job'}).exec((err, workers) => {
+    var pag = req.query.pag || 0;
+    pag = Number(pag);
+    Worker.find({})
+        .populate({path: 'job'})
+        .skip(pag)
+        .limit(5)
+        .exec((err, workers) => {
         if(err){
             res.status(500).send({message: 'Error en la petición'});
         }else{
             if(!workers){
                 res.status(404).send({message: 'No hay empleados'});
             }else{
-                res.status(200).send({workers});
+
+                Worker.count({}, (err, conteo) => {
+                    if(err){
+                        res.status(500).send({message: 'Error en la petición'});
+                    }else{
+                        res.status(200).send({
+                            workers: workers,
+                            total: conteo
+                        });
+                    }
+                });
+                
             }
         }
     });      
