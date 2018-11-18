@@ -51,6 +51,9 @@ function updateJob(req, res){
     // parms son los Parametros que se pasan por la url
     var jobId = req.params.id;
     var update = req.body;
+    delete update.start_date;
+    delete update.end_date;
+    delete update.status;
 
     Job.findByIdAndUpdate(jobId, update, {new:true}, (err, jobUpdated) => {
         if(err){
@@ -122,14 +125,27 @@ function activateJob(req, res){
 }
 
 function getJobs(req, res){
-    Job.find({}).exec((err, jobs) => {
+    var pag = req.query.pag || 0;
+    pag = Number(pag);
+    Job.find({})
+        .skip(pag)
+        .limit(5).exec((err, jobs) => {
         if(err){
             res.status(500).send({message: 'Error en la petición'});
         }else{
             if(!jobs){
                 res.status(404).send({message: 'No hay puestos'});
             }else{
-                res.status(200).send({jobs});
+                Job.count({}, (err, conteo) => {
+                    if(err){
+                        res.status(500).send({message: 'Error en la petición'});
+                    }else{
+                        res.status(200).send({
+                            jobs: jobs,
+                            total: conteo
+                        });
+                    }
+                });
             }
         }
     });      

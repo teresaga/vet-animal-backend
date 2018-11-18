@@ -27,13 +27,7 @@ function saveWorker(req, res){
     if(params.name && params.paternal_surname && params.address && params.tel && params.email && params.age && params.salary && params.job && params.entry_horary && params.departure_horary){
         worker.name = params.name;
         worker.paternal_surname = params.paternal_surname;
-
-        if(params.maternal_surname){
-            worker.maternal_surname = params.maternal_surname;
-        }else{
-            worker.maternal_surname = '';
-        }
-        
+        worker.maternal_surname = params.maternal_surname;
         worker.address = params.address;
         worker.tel = params.tel;
         worker.email = params.email;
@@ -168,6 +162,26 @@ function getWorkers(req, res){
     });      
 }
 
+function getWorkersA(req, res){
+    Worker.find({})
+        .populate({path: 'job'})
+        .exec((err, workers) => {
+        if(err){
+            res.status(500).send({message: 'Error en la petición'});
+        }else{
+            if(!workers){
+                res.status(404).send({message: 'No hay empleados'});
+            }else{
+
+                res.status(200).send({
+                    workers: workers
+                });
+                
+            }
+        }
+    });      
+}
+
 function getWorker(req, res){
     var workerId = req.params.id;
 
@@ -184,6 +198,18 @@ function getWorker(req, res){
     });
 }
 
+function getWorkerCount(req, res){
+    Worker.count({status:'A'}, (err, conteo) => {
+        if(err){
+            res.status(500).send({message: 'Error en la petición'});
+        }else{
+            res.status(200).send({
+                total: conteo
+            });
+        }
+    });
+}
+
 module.exports = {
     pruebas,
     saveWorker,
@@ -191,6 +217,8 @@ module.exports = {
     deactivateWorker,
     activateWorker,
     getWorkers,
-    getWorker
+    getWorkersA,
+    getWorker,
+    getWorkerCount
 };
 

@@ -12,6 +12,7 @@ api.post('/register', UserController.saveUser);
 api.post('/login', UserController.login);
 api.put('/deactivate-user/:id', UserController.deactivateUser);
 api.put('/activate-user/:id', UserController.activateUser);
+api.get('/users-count', UserController.getUserCount);
 api.get('/users', UserController.getUsers);
 
 
