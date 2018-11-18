@@ -4,6 +4,7 @@ var mongoose = require('mongoose');
 var Schema = mongoose.Schema;
 
 var ActivitiesSchema = Schema({
+    _id: String,
     date: String,
     time: String,
     service: { type: Schema.ObjectId, ref: 'Product' },

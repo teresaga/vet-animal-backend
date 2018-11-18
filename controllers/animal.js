@@ -2,9 +2,9 @@
 //modulos
 var fs = require('fs');
 var path = require('path');
+var moment = require('moment');
 
 //modelos
-var User = require('../models/user');
 var Animal = require('../models/animal');
 
 //acciones
@@ -20,12 +20,27 @@ function saveAnimal(req, res){
 
     var params = req.body;
 
-    if(params.name){
+    if(params.name && params.client && params.sex && params.birthdate && params.specie && params.race && params.weight && params.height && params.sterilized && params.nails){
         animal.name = params.name;
-        animal.description = params.description;
-        animal.year = params.year;
-        animal.image = null;
-        animal.user = req.user.sub;
+        animal.client = params.client;
+        animal.sex = params.sex;
+        animal.birthdate = params.birthdate;
+        animal.specie = params.specie;
+        animal.character = params.character;
+        animal.hair = params.hair;
+        animal.habitat = params.habitat;
+        animal.weight = params.weight;
+        animal.height = params.height;
+        animal.sterilized = params.sterilized;
+        animal.nails = params.nails;
+        animal.notes = params.notes;
+        animal.image = params.image;
+
+        var date = moment({});
+        animal.start_date =  moment(date).format('DD/MM/YYYY');
+
+        animal.end_date = '';
+        animal.status = 'A';
 
         animal.save((err, animalStored) => {
             if(err){
@@ -45,7 +60,52 @@ function saveAnimal(req, res){
 }
 
 function getAnimals(req, res){
-    Animal.find({}).populate({path: 'user'}).exec((err, animals) => {
+    var pag = req.query.pag || 0;
+    pag = Number(pag);
+    Animal.find({})
+    .populate({path: 'client'})
+    .populate({path: 'specie'})
+    .populate({path: 'race'})
+    .populate({path: 'character'})
+    .populate({path: 'hair'})
+    .populate({path: 'habitat'})
+    .skip(pag)
+    .limit(5)
+    .exec((err, animals) => {
+        if(err){
+            res.status(500).send({message: 'Error en la petición'});
+        }else{
+            if(!animals){
+                res.status(404).send({message: 'No hay animales'});
+            }else{
+                Animal.count({status:'A'}, (err, conteo) => {
+                    if(err){
+                        res.status(500).send({message: 'Error en la petición'});
+                    }else{
+                        res.status(200).send({
+                            animals: animals,
+                            total: conteo
+                        });
+                    }
+                });
+            }
+        }
+    });
+}
+
+function getAnimalsA(req, res){
+    var pag = req.query.pag || 0;
+    pag = Number(pag);
+    Animal.find({status:'A'})
+    .populate({path: 'client'})
+    .populate({path: 'specie'})
+    .populate({path: 'race'})
+    .populate({path: 'character'})
+    .populate({path: 'hair'})
+    .populate({path: 'habitat'})
+    .skip(pag)
+    .limit(5)
+    .exec((err, animals) => {
         if(err){
             res.status(500).send({message: 'Error en la petición'});
         }else{
@@ -61,7 +121,14 @@ function getAnimals(req, res){
 function getAnimal(req, res){
     var animalId = req.params.id;
 
-    Animal.findById(animalId).populate({path: 'user'}).exec((err, animal) => {
+    Animal.findById(animalId)
+    .populate({path: 'client'})
+    .populate({path: 'specie'})
+    .populate({path: 'race'})
+    .populate({path: 'character'})
+    .populate({path: 'hair'})
+    .populate({path: 'habitat'})
+    .exec((err, animal) => {
         if(err){
             res.status(500).send({message: 'Error en la petición'});
         }else{
@@ -77,6 +144,9 @@ function getAnimal(req, res){
 function updateAnimal(req, res){
     var animalId =  req.params.id;
     var update = req.body;
+    delete update.start_date;
+    delete update.end_date;
+    delete update.status;
 
     Animal.findByIdAndUpdate(animalId, update, {new:true}, (err, animalUpdated) => {
         if(err){
@@ -90,7 +160,6 @@ function updateAnimal(req, res){
         }
     });
 }
-
 
 function uploadImage(req, res){
     var animalId = req.params.id;
@@ -149,18 +218,66 @@ function getImageFile(req, res){
     });
 }
 
-function deleteAnimal(req, res){
+function deactivateAnimal(req, res){
+    // parms son los Parametros que se pasan por la url
     var animalId = req.params.id;
+    var update = req.body;
 
-    Animal.findByIdAndRemove(animalId, (err, animalRemoved) => {
+    update.status = 'B';
+
+    var date = moment({});
+    update.end_date =  moment(date).format('DD/MM/YYYY');
+
+    Animal.findByIdAndUpdate(animalId, update, {new:true}, (err, animalUpdated) => {
         if(err){
-            res.status(500).send({message: 'Error en a petición'});
+            res.status(500).send({
+                message: 'Error al dar de baja el animal'
+            });
         }else{
-            if(!animalRemoved){
-                res.status(404).send({message: 'No se ha borrado el animal'});
+            if(!animalUpdated){
+                res.status(404).send({message: 'No se dio de baja al animal'});
             }else{
-                res.status(200).send({animal: animalRemoved});
+                // Estatus 200 es para respuestas con exito
+                res.status(200).send({animal:animalUpdated});
             }
+        }
+    });
+
+}
+
+function activateAnimal(req, res){
+    // parms son los Parametros que se pasan por la url
+    var animalId = req.params.id;
+    var update = req.body;
+
+    update.status = 'A';
+    update.end_date = '';
+
+    Animal.findByIdAndUpdate(animalId, update, {new:true}, (err, animalUpdated) => {
+        if(err){
+            res.status(500).send({
+                message: 'Error al dar de alta el animal'
+            });
+        }else{
+            if(!animalUpdated){
+                res.status(404).send({message: 'No se dio de alta al animal'});
+            }else{
+                // Estatus 200 es para respuestas con exito
+                res.status(200).send({animal:animalUpdated});
+            }
+        }
+    });
+
+}
+
+function getAnimalCount(req, res){
+    Animal.count({status:'A'}, (err, conteo) => {
+        if(err){
+            res.status(500).send({message: 'Error en la petición'});
+        }else{
+            res.status(200).send({
+                total: conteo
+            });
         }
     });
 }
@@ -169,9 +286,12 @@ module.exports = {
     pruebas,
     saveAnimal,
     getAnimals,
+    getAnimalsA,
+    getAnimalCount,
     getAnimal,
+    deactivateAnimal,
+    activateAnimal,
     updateAnimal,
     uploadImage,
-    getImageFile,
-    deleteAnimal
+    getImageFile
 };

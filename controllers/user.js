@@ -182,17 +182,44 @@ function activateUser(req, res){
 }
 
 function getUsers(req, res){
-    User.find({}).populate({path: 'worker'}).exec((err, users) => {
+    var pag = req.query.pag || 0;
+    pag = Number(pag);
+    User.find({})
+    .populate({path: 'worker'})
+    .skip(pag)
+    .limit(5)
+    .exec((err, users) => {
         if(err){
             res.status(500).send({message: 'Error en la petición'});
         }else{
             if(!users){
                 res.status(404).send({message: 'No hay usuarios'});
             }else{
-                res.status(200).send({users});
+                User.count({}, (err, conteo) => {
+                    if(err){
+                        res.status(500).send({message: 'Error en la petición'});
+                    }else{
+                        res.status(200).send({
+                            users: users,
+                            total: conteo
+                        });
+                    }
+                });
             }
         }
     });      
+}
+
+function getUserCount(req, res){
+    User.count({status:'A'}, (err, conteo) => {
+        if(err){
+            res.status(500).send({message: 'Error en la petición'});
+        }else{
+            res.status(200).send({
+                total: conteo
+            });
+        }
+    });
 }
 
 module.exports = {
@@ -201,6 +228,7 @@ module.exports = {
     login,
     deactivateUser,
     activateUser,
+    getUserCount,
     getUsers
 };
 

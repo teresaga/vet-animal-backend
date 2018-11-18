@@ -13,13 +13,16 @@ var multipart = require('connect-multiparty');
 var md_upload = multipart({ uploadDir: './uploads/animals' });
 
 api.get('/pruebas-animales', md_auth.ensureAuth, AnimalController.pruebas);
-api.post('/animal', [md_auth.ensureAuth, md_admin.isAdmin], AnimalController.saveAnimal);
-api.get('/animals', AnimalController.getAnimals);
+api.post('/animal', md_auth.ensureAuth, AnimalController.saveAnimal);
+api.put('/update-animal/:id', md_auth.ensureAuth, AnimalController.updateAnimal);
+api.put('/deactivate-animal/:id', md_auth.ensureAuth, AnimalController.deactivateAnimal);
+api.put('/activate-animal/:id', md_auth.ensureAuth, AnimalController.activateAnimal);
+api.get('/animals', md_auth.ensureAuth, AnimalController.getAnimals);
+api.get('/animalsa', md_auth.ensureAuth, AnimalController.getAnimalsA);
+api.get('/animals-count', md_auth.ensureAuth, AnimalController.getAnimalCount);
 api.get('/animal/:id', AnimalController.getAnimal);
-api.put('/animal/:id', [md_auth.ensureAuth, md_admin.isAdmin], AnimalController.updateAnimal);
-api.post('/upload-image-animal/:id', [md_auth.ensureAuth, md_admin.isAdmin, md_upload], AnimalController.uploadImage);
-api.get('/get-image-animal/:imageFile', AnimalController.getImageFile);
-api.delete('/animal/:id', [md_auth.ensureAuth, md_admin.isAdmin], AnimalController.deleteAnimal);
+api.post('/upload-image-animal/:id', [md_auth.ensureAuth, md_upload], AnimalController.uploadImage);
+api.get('/get-image-animal/:imageFile', md_auth.ensureAuth, AnimalController.getImageFile);
 
 
 module.exports = api;

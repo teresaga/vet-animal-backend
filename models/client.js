@@ -9,7 +9,7 @@ var ClientSchema = Schema({
     maternal_surname: String,
     address: String,
     tel: String,
-    age: Number,
+    birthdate: String,
     email: String,
     start_date: String,
     end_date: String,
