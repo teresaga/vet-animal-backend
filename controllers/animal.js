@@ -28,6 +28,7 @@ function saveAnimal(req, res){
         animal.specie = params.specie;
         animal.race = params.race;
         animal.character = params.character;
+        animal.color = params.color;
         animal.hair = params.hair;
         animal.habitat = params.habitat;
         animal.weight = params.weight;
@@ -79,7 +80,7 @@ function getAnimals(req, res){
             if(!animals){
                 res.status(404).send({message: 'No hay animales'});
             }else{
-                Animal.count({status:'A'}, (err, conteo) => {
+                Animal.count({}, (err, conteo) => {
                     if(err){
                         res.status(500).send({message: 'Error en la petición'});
                     }else{
@@ -113,7 +114,16 @@ function getAnimalsA(req, res){
             if(!animals){
                 res.status(404).send({message: 'No hay animales'});
             }else{
-                res.status(200).send({animals});
+                Animal.count({status:'A'}, (err, conteo) => {
+                    if(err){
+                        res.status(500).send({message: 'Error en la petición'});
+                    }else{
+                        res.status(200).send({
+                            animals: animals,
+                            total: conteo
+                        });
+                    }
+                });
             }
         }
     });
@@ -121,10 +131,17 @@ function getAnimalsA(req, res){
 
 function getAnimalsofClient(req, res){
     var clientId = req.params.id;
-
+    var pag = req.query.pag || 0;
+    pag = Number(pag);
     Animal.find({client: clientId})
+    .populate({path: 'client'})
     .populate({path: 'specie'})
     .populate({path: 'race'})
+    .populate({path: 'character'})
+    .populate({path: 'hair'})
+    .populate({path: 'habitat'})
+    .skip(pag)
+    .limit(5)
     .exec((err, animals) => {
         if(err){
             res.status(500).send({message: 'Error en la petición'});
@@ -132,7 +149,16 @@ function getAnimalsofClient(req, res){
             if(!animals){
                 res.status(404).send({message: 'No hay animales'});
             }else{
-                res.status(200).send({animals});
+                Animal.count({}, (err, conteo) => {
+                    if(err){
+                        res.status(500).send({message: 'Error en la petición'});
+                    }else{
+                        res.status(200).send({
+                            animals: animals,
+                            total: conteo
+                        });
+                    }
+                });
             }
         }
     });
