@@ -26,6 +26,7 @@ function saveAnimal(req, res){
         animal.sex = params.sex;
         animal.birthdate = params.birthdate;
         animal.specie = params.specie;
+        animal.race = params.race;
         animal.character = params.character;
         animal.hair = params.hair;
         animal.habitat = params.habitat;
@@ -105,6 +106,25 @@ function getAnimalsA(req, res){
     .populate({path: 'habitat'})
     .skip(pag)
     .limit(5)
+    .exec((err, animals) => {
+        if(err){
+            res.status(500).send({message: 'Error en la petición'});
+        }else{
+            if(!animals){
+                res.status(404).send({message: 'No hay animales'});
+            }else{
+                res.status(200).send({animals});
+            }
+        }
+    });
+}
+
+function getAnimalsofClient(req, res){
+    var clientId = req.params.id;
+
+    Animal.find({client: clientId})
+    .populate({path: 'specie'})
+    .populate({path: 'race'})
     .exec((err, animals) => {
         if(err){
             res.status(500).send({message: 'Error en la petición'});
@@ -287,6 +307,7 @@ module.exports = {
     saveAnimal,
     getAnimals,
     getAnimalsA,
+    getAnimalsofClient,
     getAnimalCount,
     getAnimal,
     deactivateAnimal,

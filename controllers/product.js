@@ -22,11 +22,16 @@ function saveProduct(req, res){
         product.price = params.price;
         product.typeproduct = params.typeproduct;
         product.cost = params.cost;
-        product.provider = params.provider;
+        if (params.provider == 'null'){
+            delete product.provider;
+        }else{
+            product.provider = params.provider;
+        }
         product.measurementunit = params.measurementunit;
         product.typeproduct = params.typeproduct;
         product.stock_min = params.stock_min;
         product.stock_max = params.stock_max;
+        product.stock = params.stock;
 
         //Obtiene fecha actual y la da un formato
         var date = moment({});
