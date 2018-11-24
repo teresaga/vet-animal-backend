@@ -10,7 +10,7 @@ var ConsultationSchema = Schema({
     temperature: String,
     notes: String,
     image: String,
-    date: String
+    date: Date
 });
 
 module.exports = mongoose.model('Consultation', ConsultationSchema);

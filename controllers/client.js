@@ -27,7 +27,7 @@ function saveClient(req, res){
         client.birthdate = params.birthdate;
         //Obtiene fecha actual y la da un formato
         var date = moment({});
-        client.start_date =  moment(date).format('DD/MM/YYYY');
+        client.start_date =  moment(date).format('YYYY-MM-DD 00:00:00.000[Z]');
         client.end_date = '';
         client.status = 'A';
 
@@ -76,7 +76,7 @@ function deactivateClient(req, res){
     update.status = 'B';
 
     var date = moment({});
-    update.end_date =  moment(date).format('DD/MM/YYYY');
+    update.end_date =  moment(date).format('YYYY-MM-DD 00:00:00.000[Z]');
 
     Client.findByIdAndUpdate(clientId, update, {new:true}, (err, clientUpdated) => {
         if(err){
@@ -126,6 +126,32 @@ function getClients(req, res){
     Client.find({})
         .skip(pag)
         .limit(5)
+        .exec((err, clients) => {
+        if(err){
+            res.status(500).send({message: 'Error en la petición'});
+        }else{
+            if(!clients){
+                res.status(404).send({message: 'No hay clientes'});
+            }else{
+
+                Client.count({}, (err, conteo) => {
+                    if(err){
+                        res.status(500).send({message: 'Error en la petición'});
+                    }else{
+                        res.status(200).send({
+                            clients: clients,
+                            total: conteo
+                        });
+                    }
+                });
+                
+            }
+        }
+    });      
+}
+
+function getClientsSelect(req, res){
+    Client.find({})
         .exec((err, clients) => {
         if(err){
             res.status(500).send({message: 'Error en la petición'});
@@ -201,5 +227,6 @@ module.exports = {
     getClients,
     getClientsA,
     getClientCount,
+    getClientsSelect,
     getClient
 };

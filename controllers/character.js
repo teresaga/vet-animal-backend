@@ -22,7 +22,7 @@ function saveCharacter(req, res){
         character.name = params.name;
 
         var date = moment({});
-        character.start_date =  moment(date).format('DD/MM/YYYY');
+        character.start_date =  moment(date).format('YYYY-MM-DD 00:00:00.000[Z]');
 
         character.end_date = '';
         character.status = 'A';
@@ -77,7 +77,7 @@ function deactivateCharacter(req, res){
     update.status = 'B';
 
     var date = moment({});
-    update.end_date =  moment(date).format('DD/MM/YYYY');
+    update.end_date =  moment(date).format('YYYY-MM-DD 00:00:00.000[Z]');
 
     Character.findByIdAndUpdate(characterId, update, {new:true}, (err, characterUpdated) => {
         if(err){

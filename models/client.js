@@ -11,8 +11,8 @@ var ClientSchema = Schema({
     tel: String,
     birthdate: String,
     email: String,
-    start_date: String,
-    end_date: String,
+    start_date: Date,
+    end_date: Date,
     status: String
 });
 

@@ -25,7 +25,7 @@ function saveTypeproduct(req, res){
         typeproduct.name = params.name;
 
         var date = moment({});
-        typeproduct.start_date =  moment(date).format('DD/MM/YYYY');
+        typeproduct.start_date =  moment(date).format('YYYY-MM-DD 00:00:00.000[Z]');
 
         typeproduct.end_date = '';
         typeproduct.status = 'A';
@@ -100,7 +100,7 @@ function deactivateTypeproduct(req, res){
     update.status = 'B';
 
     var date = moment({});
-    update.end_date =  moment(date).format('DD/MM/YYYY');
+    update.end_date =  moment(date).format('YYYY-MM-DD 00:00:00.000[Z]');
 
     Typeproduct.findByIdAndUpdate(typeproductId, update, {new:true}, (err, typeproductUpdated) => {
         if(err){

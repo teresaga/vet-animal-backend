@@ -22,7 +22,7 @@ function saveHabitat(req, res){
         habitat.name = params.name;
 
         var date = moment({});
-        habitat.start_date =  moment(date).format('DD/MM/YYYY');
+        habitat.start_date =  moment(date).format('YYYY-MM-DD 00:00:00.000[Z]');
 
         habitat.end_date = '';
         habitat.status = 'A';
@@ -77,7 +77,7 @@ function deactivateHabitat(req, res){
     update.status = 'B';
 
     var date = moment({});
-    update.end_date =  moment(date).format('DD/MM/YYYY');
+    update.end_date =  moment(date).format('YYYY-MM-DD 00:00:00.000[Z]');
 
     Habitat.findByIdAndUpdate(habitatId, update, {new:true}, (err, habitatUpdated) => {
         if(err){

@@ -13,7 +13,7 @@ api.put('/update-race/:id', md_auth.ensureAuth, RaceController.updateRace);
 api.put('/deactivate-race/:id', md_auth.ensureAuth, RaceController.deactivateRace);
 api.put('/activate-race/:id', md_auth.ensureAuth, RaceController.activateRace);
 api.get('/races', RaceController.getRaces);
-api.get('/racesa/:specie', RaceController.getRacesA);
+api.get('/racesa-specie/:id', RaceController.getRacesAofSpecie);
 api.get('/race/:id', RaceController.getRace);
 
 

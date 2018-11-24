@@ -18,12 +18,14 @@ api.put('/update-animal/:id', md_auth.ensureAuth, AnimalController.updateAnimal)
 api.put('/deactivate-animal/:id', md_auth.ensureAuth, AnimalController.deactivateAnimal);
 api.put('/activate-animal/:id', md_auth.ensureAuth, AnimalController.activateAnimal);
 api.get('/animals', md_auth.ensureAuth, AnimalController.getAnimals);
+api.get('/animals-select/:id', md_auth.ensureAuth, AnimalController.getAnimalsSelect);
 api.get('/animals-client/:id', md_auth.ensureAuth, AnimalController.getAnimalsofClient);
+api.get('/animalsa-client/:id', md_auth.ensureAuth, AnimalController.getAnimalsAofClient);
 api.get('/animalsa', md_auth.ensureAuth, AnimalController.getAnimalsA);
 api.get('/animals-count', AnimalController.getAnimalCount);
 api.get('/animal/:id', AnimalController.getAnimal);
 api.post('/upload-image-animal/:id', [md_auth.ensureAuth, md_upload], AnimalController.uploadImage);
-api.get('/get-image-animal/:imageFile', md_auth.ensureAuth, AnimalController.getImageFile);
+api.get('/get-image-animal/:imageFile', AnimalController.getImageFile);
 
 
 module.exports = api;

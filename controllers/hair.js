@@ -22,7 +22,7 @@ function saveHair(req, res){
         hair.name = params.name;
 
         var date = moment({});
-        hair.start_date =  moment(date).format('DD/MM/YYYY');
+        hair.start_date =  moment(date).format('YYYY-MM-DD 00:00:00.000[Z]');
 
         hair.end_date = '';
         hair.status = 'A';
@@ -77,7 +77,7 @@ function deactivateHair(req, res){
     update.status = 'B';
 
     var date = moment({});
-    update.end_date =  moment(date).format('DD/MM/YYYY');
+    update.end_date =  moment(date).format('YYYY-MM-DD 00:00:00.000[Z]');
 
     Hair.findByIdAndUpdate(hairId, update, {new:true}, (err, hairUpdated) => {
         if(err){

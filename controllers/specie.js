@@ -22,7 +22,7 @@ function saveSpecie(req, res){
         specie.name = params.name;
 
         var date = moment({});
-        specie.start_date =  moment(date).format('DD/MM/YYYY');
+        specie.start_date =  moment(date).format('YYYY-MM-DD 00:00:00.000[Z]');
 
         specie.end_date = '';
         specie.status = 'A';
@@ -77,7 +77,7 @@ function deactivateSpecie(req, res){
     update.status = 'B';
 
     var date = moment({});
-    update.end_date =  moment(date).format('DD/MM/YYYY');
+    update.end_date =  moment(date).format('YYYY-MM-DD 00:00:00.000[Z]');
 
     Specie.findByIdAndUpdate(specieId, update, {new:true}, (err, specieUpdated) => {
         if(err){

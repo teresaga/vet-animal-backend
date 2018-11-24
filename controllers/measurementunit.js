@@ -22,7 +22,7 @@ function saveMeasurementunit(req, res){
         measurementunit.name = params.name;
 
         var date = moment({});
-        measurementunit.start_date =  moment(date).format('DD/MM/YYYY');
+        measurementunit.start_date =  moment(date).format('YYYY-MM-DD 00:00:00.000[Z]');
 
         measurementunit.end_date = '';
         measurementunit.status = 'A';
@@ -77,7 +77,7 @@ function deactivateMeasurementunit(req, res){
     update.status = 'B';
 
     var date = moment({});
-    update.end_date =  moment(date).format('DD/MM/YYYY');
+    update.end_date =  moment(date).format('YYYY-MM-DD 00:00:00.000[Z]');
 
     Measurementunit.findByIdAndUpdate(measurementunitId, update, {new:true}, (err, measurementunitUpdated) => {
         if(err){
