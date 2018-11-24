@@ -13,8 +13,8 @@ var ProductSchema = Schema({
     stock_min: String,
     stock_max: String,
     stock: String,
-    start_date: String,
-    end_date: String,
+    start_date: Date,
+    end_date: Date,
     status: String
 });
 

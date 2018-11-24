@@ -24,21 +24,21 @@ function saveWorker(req, res){
 
     var params = req.body;
 
-    if(params.name && params.paternal_surname && params.address && params.tel && params.email && params.age && params.salary && params.job && params.entry_horary && params.departure_horary){
+    if(params.name && params.paternal_surname && params.address && params.tel && params.email && params.birthdate && params.salary && params.job && params.entry_horary && params.departure_horary){
         worker.name = params.name;
         worker.paternal_surname = params.paternal_surname;
         worker.maternal_surname = params.maternal_surname;
         worker.address = params.address;
         worker.tel = params.tel;
         worker.email = params.email;
-        worker.age = params.age;
+        worker.birthdate = params.birthdate;
         worker.salary = params.salary;
         worker.job = params.job;
         worker.entry_horary = params.entry_horary;
         worker.departure_horary = params.departure_horary;
         //Obtiene fecha actual y la da un formato
         var date = moment({});
-        worker.start_date =  moment(date).format('DD/MM/YYYY');
+        worker.start_date =  moment(date).format('YYYY-MM-DD 00:00:00.000[Z]');
         worker.end_date = '';
         worker.status = 'A';
 
@@ -87,7 +87,7 @@ function deactivateWorker(req, res){
     update.status = 'B';
 
     var date = moment({});
-    update.end_date =  moment(date).format('DD/MM/YYYY');
+    update.end_date =  moment(date).format('YYYY-MM-DD 00:00:00.000[Z]');
 
     Worker.findByIdAndUpdate(workerId, update, {new:true}, (err, workerUpdated) => {
         if(err){

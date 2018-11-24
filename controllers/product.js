@@ -35,7 +35,7 @@ function saveProduct(req, res){
 
         //Obtiene fecha actual y la da un formato
         var date = moment({});
-        product.start_date =  moment(date).format('DD/MM/YYYY');
+        product.start_date =  moment(date).format('YYYY-MM-DD 00:00:00.000[Z]');
         product.end_date = '';
         product.status = 'A';
 
@@ -84,7 +84,7 @@ function deactivateProduct(req, res){
     update.status = 'B';
 
     var date = moment({});
-    update.end_date =  moment(date).format('DD/MM/YYYY');
+    update.end_date =  moment(date).format('YYYY-MM-DD 00:00:00.000[Z]');
 
     Product.findByIdAndUpdate(productId, update, {new:true}, (err, productUpdated) => {
         if(err){

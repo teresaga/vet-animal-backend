@@ -20,6 +20,9 @@ var provider_routes = require('./routes/provider');
 var product_routes = require('./routes/product');
 var client_routes = require('./routes/client');
 var animal_routes = require('./routes/animal');
+var consultas_routes = require('./routes/consultas');
+var activity_routes = require('./routes/activity');
+var sale_routes = require('./routes/sale');
 
 // middlewares de body-parser
 app.use(bodyParser.urlencoded({extended:false}));
@@ -50,6 +53,8 @@ app.use('/api', provider_routes);
 app.use('/api', product_routes);
 app.use('/api', client_routes);
 app.use('/api', animal_routes);
-
+app.use('/api', consultas_routes);
+app.use('/api', activity_routes);
+app.use('/api', sale_routes);
 
 module.exports = app;

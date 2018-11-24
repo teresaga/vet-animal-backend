@@ -32,7 +32,7 @@ function saveUser(req, res){
 
         //Obtiene fecha actual y la da un formato
         var date = moment({});
-        user.start_date =  moment(date).format('DD/MM/YYYY');
+        user.start_date =  moment(date).format('YYYY-MM-DD 00:00:00.000[Z]');
 
         user.end_date = '';
         user.status = 'A';
@@ -78,6 +78,64 @@ function saveUser(req, res){
             message: 'Introduce los datos correctamente para poder registrar al usuario'
         });
     }
+}
+
+function updateUser(req, res){
+    var userId =  req.params.id;
+    var update = req.body;
+    delete update.username;
+    delete update.password;
+    delete update.start_date;
+    delete update.end_date;
+    delete update.status;
+
+
+    User.findOne({worker: update.worker, _id: { $ne: userId }}, (err, issetUser2) => {
+        if(!issetUser2){
+            if(update.worker=='' || update.worker==null){
+                delete update.worker;
+            }
+            User.findByIdAndUpdate(userId, update, {new:true}, (err, userUpdated) => {
+                if(err){
+                    res.status(500).send({message: 'Error en la petición'});
+                }else{
+                    if(!userUpdated){
+                        res.status(404).send({message: 'No se ha actualizado el usuario'});
+                    }else{
+                        res.status(200).send({user: userUpdated});
+                    }
+                }
+            });
+        }else{
+            res.status(200).send({message: 'El usuario no se pudo actualizar, el empleado ya ha sido asignado antes'});
+        }
+    });
+}
+
+function updateUserPassword(req, res){
+    var userId =  req.params.id;
+    var update = req.body;
+    delete update.username;
+    delete update.worker;
+    delete update.role;
+    delete update.start_date;
+    delete update.end_date;
+    delete update.status;
+
+    bcrypt.hash(update.password, null, null, function(err, hash){
+        update.password = hash;
+        User.findByIdAndUpdate(userId, update, (err, userUpdated) => {
+            if(err){
+                res.status(500).send({message: 'Error en la petición'});
+            }else{
+                if(!userUpdated){
+                    res.status(404).send({message: 'No se ha actualizado el usuario'});
+                }else{
+                    res.status(200).send({user: userUpdated});
+                }
+            }
+        });
+    });
 }
 
 function login(req, res){
@@ -132,7 +190,7 @@ function deactivateUser(req, res){
     update.status = 'B';
 
     var date = moment({});
-    update.end_date =  moment(date).format('DD/MM/YYYY');
+    update.end_date =  moment(date).format('YYYY-MM-DD 00:00:00.000[Z]');
 
     User.findByIdAndUpdate(userId, update, {new:true}, (err, userUpdated) => {
         if(err){
@@ -182,9 +240,10 @@ function activateUser(req, res){
 }
 
 function getUsers(req, res){
+    var userId = req.params.id;
     var pag = req.query.pag || 0;
     pag = Number(pag);
-    User.find({})
+    User.find({ _id: { $ne: userId }})
     .populate({path: 'worker'})
     .skip(pag)
     .limit(5)
@@ -229,6 +288,8 @@ module.exports = {
     deactivateUser,
     activateUser,
     getUserCount,
+    updateUser,
+    updateUserPassword,
     getUsers
 };
 

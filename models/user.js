@@ -8,8 +8,8 @@ var UserSchema = Schema({
     password: String,
     worker: { type: Schema.ObjectId, ref: 'Worker' },
     role: String,
-    start_date: String,
-    end_date: String,
+    start_date: Date,
+    end_date: Date,
     status: String
 });
 

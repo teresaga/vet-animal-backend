@@ -23,7 +23,7 @@ function saveRace(req, res){
         race.specie = params.specie;
 
         var date = moment({});
-        race.start_date =  moment(date).format('DD/MM/YYYY');
+        race.start_date =  moment(date).format('YYYY-MM-DD 00:00:00.000[Z]');
 
         race.end_date = '';
         race.status = 'A';
@@ -78,7 +78,7 @@ function deactivateRace(req, res){
     update.status = 'B';
 
     var date = moment({});
-    update.end_date =  moment(date).format('DD/MM/YYYY');
+    update.end_date =  moment(date).format('YYYY-MM-DD 00:00:00.000[Z]');
 
     Race.findByIdAndUpdate(raceId, update, {new:true}, (err, raceUpdated) => {
         if(err){
@@ -166,6 +166,32 @@ function getRacesA(req, res){
     });      
 }
 
+function getRacesAofSpecie(req, res){
+    var specieId = req.params.id;
+    Race.find({specie: specieId, status: 'A'})
+    .populate({path: 'specie'})
+    .exec((err, races) => {
+        if(err){
+            res.status(500).send({message: 'Error en la petición'});
+        }else{
+            if(!races){
+                res.status(404).send({message: 'No hay razas'});
+            }else{
+                Race.count({}, (err, conteo) => {
+                    if(err){
+                        res.status(500).send({message: 'Error en la petición'});
+                    }else{
+                        res.status(200).send({
+                            races: races,
+                            total: conteo
+                        });
+                    }
+                });
+            }
+        }
+    });
+}
+
 function getRace(req, res){
     var raceId = req.params.id;
 
@@ -186,6 +212,7 @@ module.exports = {
     saveRace,
     updateRace,
     getRacesA,
+    getRacesAofSpecie,
     deactivateRace,
     activateRace,
     getRaces,

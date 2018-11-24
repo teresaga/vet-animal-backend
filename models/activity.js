@@ -4,16 +4,14 @@ var mongoose = require('mongoose');
 var Schema = mongoose.Schema;
 
 var ActivitiesSchema = Schema({
-    _id: String,
-    date: String,
-    time: String,
+    date: Date,
     service: { type: Schema.ObjectId, ref: 'Product' },
     client: { type: Schema.ObjectId, ref: 'Client' },
     animal: { type: Schema.ObjectId, ref: 'Animal' },
     worker: { type: Schema.ObjectId, ref: 'Worker' },
     notes: String,
-    start_date: String,
-    end_date: String,
+    start_date: Date,
+    end_date: Date,
     status: String
 });
 

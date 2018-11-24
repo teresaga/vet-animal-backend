@@ -5,8 +5,8 @@ var Schema = mongoose.Schema;
 
 var SpecieSchema = Schema({
     name: String,
-    start_date: String,
-    end_date: String,
+    start_date: Date,
+    end_date: Date,
     status: String
 });
 

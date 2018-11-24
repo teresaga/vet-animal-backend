@@ -25,7 +25,7 @@ function saveJob(req, res){
         job.name = params.name;
 
         var date = moment({});
-        job.start_date =  moment(date).format('DD/MM/YYYY');
+        job.start_date =  moment(date).format('YYYY-MM-DD 00:00:00.000[Z]');
 
         job.end_date = '';
         job.status = 'A';
@@ -80,7 +80,7 @@ function deactivateJob(req, res){
     update.status = 'B';
 
     var date = moment({});
-    update.end_date =  moment(date).format('DD/MM/YYYY');
+    update.end_date=moment(date).format('YYYY-MM-DD 00:00:00.000[Z]');
 
     Job.findByIdAndUpdate(jobId, update, {new:true}, (err, jobUpdated) => {
         if(err){

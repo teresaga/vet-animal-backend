@@ -11,6 +11,7 @@ var AnimalSchema = Schema({
     specie: { type: Schema.ObjectId, ref: 'Specie' },
     race: { type: Schema.ObjectId, ref: 'Race' },
     character: { type: Schema.ObjectId, ref: 'Character' },
+    color: String,
     hair: { type: Schema.ObjectId, ref: 'Hair' },
     habitat: { type: Schema.ObjectId, ref: 'Habitat' },
     weight: String,
@@ -19,8 +20,8 @@ var AnimalSchema = Schema({
     nails: String,
     notes: String,
     image: String,
-    start_date: String,
-    end_date: String,
+    start_date: Date,
+    end_date: Date,
     status: String
 });
 

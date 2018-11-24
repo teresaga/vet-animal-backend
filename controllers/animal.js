@@ -39,7 +39,7 @@ function saveAnimal(req, res){
         animal.image = params.image;
 
         var date = moment({});
-        animal.start_date =  moment(date).format('DD/MM/YYYY');
+        animal.start_date =  moment(date).format('YYYY-MM-DD 00:00:00.000[Z]');
 
         animal.end_date = '';
         animal.status = 'A';
@@ -89,6 +89,30 @@ function getAnimals(req, res){
                             total: conteo
                         });
                     }
+                });
+            }
+        }
+    });
+}
+
+function getAnimalsSelect(req, res){
+    var clientId = req.params.id;
+    Animal.find({client: clientId})
+    .populate({path: 'client'})
+    .populate({path: 'specie'})
+    .populate({path: 'race'})
+    .populate({path: 'character'})
+    .populate({path: 'hair'})
+    .populate({path: 'habitat'})
+    .exec((err, animals) => {
+        if(err){
+            res.status(500).send({message: 'Error en la petición'});
+        }else{
+            if(!animals){
+                res.status(404).send({message: 'No hay animales'});
+            }else{
+                res.status(200).send({
+                    animals: animals
                 });
             }
         }
@@ -149,7 +173,7 @@ function getAnimalsofClient(req, res){
             if(!animals){
                 res.status(404).send({message: 'No hay animales'});
             }else{
-                Animal.count({}, (err, conteo) => {
+                Animal.count({client: clientId}, (err, conteo) => {
                     if(err){
                         res.status(500).send({message: 'Error en la petición'});
                     }else{
@@ -158,6 +182,30 @@ function getAnimalsofClient(req, res){
                             total: conteo
                         });
                     }
+                });
+            }
+        }
+    });
+}
+
+function getAnimalsAofClient(req, res){
+    var clientId = req.params.id;
+    Animal.find({client: clientId, status: 'A'})
+    .populate({path: 'client'})
+    .populate({path: 'specie'})
+    .populate({path: 'race'})
+    .populate({path: 'character'})
+    .populate({path: 'hair'})
+    .populate({path: 'habitat'})
+    .exec((err, animals) => {
+        if(err){
+            res.status(500).send({message: 'Error en la petición'});
+        }else{
+            if(!animals){
+                res.status(404).send({message: 'No hay animales'});
+            }else{
+                res.status(200).send({
+                    animals: animals
                 });
             }
         }
@@ -272,7 +320,7 @@ function deactivateAnimal(req, res){
     update.status = 'B';
 
     var date = moment({});
-    update.end_date =  moment(date).format('DD/MM/YYYY');
+    update.end_date =  moment(date).format('YYYY-MM-DD 00:00:00.000[Z]');
 
     Animal.findByIdAndUpdate(animalId, update, {new:true}, (err, animalUpdated) => {
         if(err){
@@ -334,8 +382,10 @@ module.exports = {
     getAnimals,
     getAnimalsA,
     getAnimalsofClient,
+    getAnimalsAofClient,
     getAnimalCount,
     getAnimal,
+    getAnimalsSelect,
     deactivateAnimal,
     activateAnimal,
     updateAnimal,

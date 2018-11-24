@@ -7,7 +7,7 @@ var SaleSchema = Schema({
     amount: String,
     client: { type: Schema.ObjectId, ref: 'Client' },
     animal: { type: Schema.ObjectId, ref: 'Animal' },
-    date: String
+    date: Date
 });
 
 module.exports = mongoose.model('Sale', SaleSchema);

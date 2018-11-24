@@ -11,8 +11,8 @@ var ProviderSchema = Schema({
     tel: String,
     email: String,
     contact_person: String,
-    start_date: String,
-    end_date: String,
+    start_date: Date,
+    end_date: Date,
     status: String
 });
 
