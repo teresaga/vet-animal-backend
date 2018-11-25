@@ -162,7 +162,11 @@ function getProducts(req, res){
 }
 
 function getProductsA(req, res){
-    Product.find({status:'A'}).exec((err, products) => {
+    Product.find({status:'A'})
+    .populate({path: 'provider'})
+    .populate({path: 'typeproduct'})
+    .populate({path: 'measurementunit'})
+    .exec((err, products) => {
         if(err){
             res.status(500).send({message: 'Error en la petición'});
         }else{
@@ -170,6 +174,20 @@ function getProductsA(req, res){
                 res.status(404).send({message: 'No hay productos'});
             }else{
                 res.status(200).send({products});
+            }
+        }
+    });      
+}
+
+function getProductsServicesA(req, res){
+    Product.find({status:'A', typeproduct: '5bebc3eb3cf30da624b4229a'}).exec((err, services) => {
+        if(err){
+            res.status(500).send({message: 'Error en la petición'});
+        }else{
+            if(!services){
+                res.status(404).send({message: 'No hay servicios'});
+            }else{
+                res.status(200).send({services});
             }
         }
     });      
@@ -211,6 +229,7 @@ module.exports = {
     activateProduct,
     getProducts,
     getProductsA,
+    getProductsServicesA,
     getProductCount,
     getProduct
 };

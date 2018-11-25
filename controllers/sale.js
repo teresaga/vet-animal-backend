@@ -26,12 +26,7 @@ function saveSale(req, res){
 
     if(params.amount){
         sale.amount = params.amount;
-        if (sale.animal == 'null' || !sale.animal){
-            delete sale.animal;
-        }else{
-            sale.animal = params.animal;
-        }
-        if (sale.client == 'null' || !sale.client){
+        if (params.client == 'null' || !params.client){
             delete sale.client;
         }else{
             sale.client = params.client;
@@ -92,7 +87,6 @@ function getSales(req, res){
     var dateend = req.query.dateend;
     Sale.find({$and: [ { date: { $gte: new Date(datestart) } }, { date: { $lte: new Date(dateend) } } ]})
     .populate({path: 'client'})
-    .populate({path: 'animal'})
     .skip(pag)
     .limit(5)
     .exec((err, sales) => {
@@ -102,7 +96,7 @@ function getSales(req, res){
             if(!sales){
                 res.status(404).send({message: 'No hay ventas'});
             }else{
-                Sale.count({}, (err, conteo) => {
+                Sale.count({$and: [ { date: { $gte: new Date(datestart) } }, { date: { $lte: new Date(dateend) } } ]}, (err, conteo) => {
                     if(err){
                         res.status(500).send({message: 'Error en la petición'});
                     }else{

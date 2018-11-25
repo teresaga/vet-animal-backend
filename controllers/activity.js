@@ -36,8 +36,8 @@ function saveActivity(req, res){
         activity.end_date = '';
         activity.status = 'PE';
 
-        if(activity.date){
-            activity.date =  moment(params.date).format('YYYY-MM-DD 00:00:00.000[Z]');
+        if(params.date){
+            activity.date =  moment(params.date).format('YYYY-MM-DD HH:mm:ss.SSS[Z]');
         }else{ 
             var date2 = moment({});
             activity.date =  moment(date2).format('YYYY-MM-DD 00:00:00.000[Z]');
@@ -67,7 +67,6 @@ function updateActivity(req, res){
     delete update.start_date;
     delete update.end_date;
     delete update.status;
-    delete update.date;
 
     Activity.findByIdAndUpdate(activityId, update, {new:true}, (err, activityUpdated) => {
         if(err){
