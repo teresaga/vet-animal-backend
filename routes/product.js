@@ -14,6 +14,7 @@ api.put('/deactivate-product/:id', md_auth.ensureAuth, ProductController.deactiv
 api.put('/activate-product/:id', md_auth.ensureAuth, ProductController.activateProduct);
 api.get('/products', md_auth.ensureAuth, ProductController.getProducts);
 api.get('/productsa', md_auth.ensureAuth, ProductController.getProductsA);
+api.get('/productsservicea', md_auth.ensureAuth, ProductController.getProductsServicesA);
 api.get('/products-count', ProductController.getProductCount);
 api.get('/product/:id', ProductController.getProduct);
 
