@@ -111,10 +111,27 @@ function getSales(req, res){
     });
 }
 
+function getSalesofClient(req, res){
+    var id = req.params.id;
+    
+    var datestart = req.query.datestart;
+    var dateend = req.query.dateend;
+    Sale.count({client: id , $and: [ { date: { $gte: new Date(datestart) } }, { date: { $lte: new Date(dateend) } } ]}, (err, conteo) => {
+        if(err){
+            res.status(500).send({message: 'Error en la petición'});
+        }else{
+            res.status(200).send({
+                total: conteo
+            });
+        }
+    });
+}
+
 function getSalesDetails(req, res){
     var saleId = req.params.id;
     SaleDetail.find({sale: saleId})
     .populate({path: 'sale'})
+    .populate({path: 'product'})
     .exec((err, saledetails) => {
         if(err){
             res.status(500).send({message: 'Error en la petición'});
@@ -133,10 +150,36 @@ function getSalesDetails(req, res){
     });
 }
 
+function getSalesDetailsProductos(req, res){
+    var productId = req.params.id;
+    
+    SaleDetail.find({product: productId})
+    .populate({path: 'sale'})
+    .populate({path: 'product'})
+    .exec((err, saledetails) => {
+        if(err){
+            res.status(500).send({message: 'Error en la petición'});
+        }else{
+            SaleDetail.count({product: productId}, (err, conteo) => {
+                if(err){
+                    res.status(500).send({message: 'Error en la petición'});
+                }else{
+                    res.status(200).send({
+                        saledetails: saledetails,
+                        total: conteo
+                    });
+                }
+            });
+        }
+    });
+}
+
 module.exports = {
     pruebas,
     getSales,
     getSalesDetails,
+    getSalesDetailsProductos,
+    getSalesofClient,
     saveSaledetails,
     saveSale
 };

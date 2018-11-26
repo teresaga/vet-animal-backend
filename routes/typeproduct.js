@@ -6,6 +6,9 @@ var TypeproductController = require('../controllers/typeproduct');
 var api = express.Router();
 // Cargar middleware
 var md_auth = require('../middlewares/authenticated');
+var md_admin = require('../middlewares/is_admin');
+var md_vet = require('../middlewares/is_vet');
+var md_cajero = require('../middlewares/is_cajero');
 
 api.get('/pruebas-tiposproductos',TypeproductController.pruebas);
 api.post('/typeproduct', md_auth.ensureAuth, TypeproductController.saveTypeproduct);
