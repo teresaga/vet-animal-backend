@@ -15,6 +15,7 @@ api.post('/product', [md_auth.ensureAuth, md_vet.isVet] ,ProductController.saveP
 api.put('/update-product/:id', [md_auth.ensureAuth, md_vet.isVet] , ProductController.updateProduct);
 api.put('/deactivate-product/:id',  [md_auth.ensureAuth, md_vet.isVet] , ProductController.deactivateProduct);
 api.put('/activate-product/:id', [md_auth.ensureAuth, md_vet.isVet] , ProductController.activateProduct);
+api.put('/stock-product/:id', md_auth.ensureAuth, ProductController.changeProduct);
 api.get('/products', md_auth.ensureAuth, ProductController.getProducts);
 api.get('/productsa', md_auth.ensureAuth, ProductController.getProductsA);
 api.get('/productsservicea', md_auth.ensureAuth, ProductController.getProductsServicesA);

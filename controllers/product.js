@@ -128,6 +128,23 @@ function activateProduct(req, res){
 
 }
 
+function changeProduct(req, res){
+    // parms son los Parametros que se pasan por la url
+    var productId = req.params.id;
+    var update  = req.query;
+    
+    Product.findByIdAndUpdate(productId, update, {new:true}, (err, productUpdated) => {
+        if(err){
+            res.status(500).send({
+                message: 'Error al dar de baja al producto', err:err
+            });
+        }else{
+            res.status(200).send({product: productUpdated});
+        }
+    });
+
+}
+
 function getProducts(req, res){
     var pag = req.query.pag || 0;
     pag = Number(pag);
@@ -229,6 +246,7 @@ module.exports = {
     activateProduct,
     getProducts,
     getProductsA,
+    changeProduct,
     getProductsServicesA,
     getProductCount,
     getProduct
