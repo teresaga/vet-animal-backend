@@ -32,7 +32,7 @@ function saveSale(req, res){
             sale.client = params.client;
         }
         var date = moment({});
-        sale.date =  moment(date).format('YYYY-MM-DD 00:00:00.000[Z]');
+        sale.date =  moment(date);
 
         sale.save((err, saleStored) => {
             if(err){
