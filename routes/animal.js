@@ -1,9 +1,15 @@
 'use strict'
 
 var express = require('express');
+
 var AnimalController = require('../controllers/animal');
 
 var api = express.Router();
+
+//NUEVO IMAGENES
+var fileUpload = require('express-fileupload');
+api.use(fileUpload());
+
 // Cargar middleware
 var md_auth = require('../middlewares/authenticated');
 var md_admin = require('../middlewares/is_admin');
@@ -24,7 +30,7 @@ api.get('/animalsa-client/:id', md_auth.ensureAuth, AnimalController.getAnimalsA
 api.get('/animalsa', md_auth.ensureAuth, AnimalController.getAnimalsA);
 api.get('/animals-count', AnimalController.getAnimalCount);
 api.get('/animal/:id', AnimalController.getAnimal);
-api.post('/upload-image-animal/:id', [md_auth.ensureAuth, md_upload], AnimalController.uploadImage);
+api.put('/upload-image-animal/:id',  md_auth.ensureAuth, AnimalController.uploadImage);
 api.get('/get-image-animal/:imageFile', AnimalController.getImageFile);
 
 

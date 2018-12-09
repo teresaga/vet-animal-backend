@@ -254,7 +254,7 @@ function updateAnimal(req, res){
         }
     });
 }
-
+/*
 function uploadImage(req, res){
     var animalId = req.params.id;
     var file_name = 'No subido...';
@@ -291,6 +291,56 @@ function uploadImage(req, res){
                 }else{
                     res.status(200).send({message: 'Extensión no valida'});
                 }
+            });
+        }
+            
+    }else{
+        res.status(200).send({message: 'No se han subido archivos'});
+    }
+}
+*/
+function uploadImage(req, res){
+    var animalId = req.params.id;
+    
+    if(req.files){
+        //Obtener nombre del archivo
+        var archivo = req.files.image;
+        var nombreCortado = archivo.name.split('.');
+        var extensionArchivo = nombreCortado[nombreCortado.length-1];
+
+        //Solo estas extensiones aceptamos
+        var extensionesValidas = ['png', 'jpg', 'gif', 'jpeg'];
+        
+        if(extensionesValidas.indexOf(extensionArchivo) < 0){
+            res.status(200).send({message: 'Extension no válida, las válidas son png, jpg, gif, jpeg'});
+        }else{
+            //Nombre de archivo personalizado
+            var nombreArchivo = `${ animalId }-${ new Date().getMilliseconds() }.${ extensionArchivo }`;
+            //Mover Archivo del temporal a un path
+            var path = `./uploads/animals/${ nombreArchivo }`;
+
+            archivo.mv(path, err =>{
+                if(err){
+                    res.status(500).send({message: 'Error al mover archivo'});
+                }else{
+                    //Modificar Animal
+                    Animal.findByIdAndUpdate(animalId, {image: nombreArchivo}, {new:true}, (err, animalUpdated) => {
+                        if(err){
+                            res.status(500).send({
+                                message: 'Error al actualizar animal'
+                            });
+                        }else{
+                            if(!animalUpdated){
+                                res.status(404).send({message: 'No se ha podido actualizar al animal'});
+                            }else{
+                                // Estatus 200 es para respuestas con exito
+                                res.status(200).send({animal: animalUpdated, image: nombreArchivo});
+                            }
+                        }
+                    });
+                    //res.status(200).send({message: 'Archivo movido'});
+                }
+
             });
         }
             
