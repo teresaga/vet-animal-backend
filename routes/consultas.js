@@ -4,6 +4,11 @@ var express = require('express');
 var ConsultationController = require('../controllers/consultas');
 
 var api = express.Router();
+
+//NUEVO IMAGENES
+var fileUpload = require('express-fileupload');
+api.use(fileUpload());
+
 // Cargar middleware
 var md_auth = require('../middlewares/authenticated');
 var md_admin = require('../middlewares/is_admin');
