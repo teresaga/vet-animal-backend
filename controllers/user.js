@@ -243,7 +243,7 @@ function getUsers(req, res){
     var userId = req.params.id;
     var pag = req.query.pag || 0;
     pag = Number(pag);
-    User.find({ _id: { $ne: userId }, worker: { $exists: false }})
+    User.find({ _id: { $ne: userId }, worker: { $exists: true }})
     .populate({path: 'worker'})
     .skip(pag)
     .limit(5)
