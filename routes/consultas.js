@@ -7,7 +7,7 @@ var api = express.Router();
 
 //NUEVO IMAGENES
 var fileUpload = require('express-fileupload');
-api.use(fileUpload());
+//api.use(fileUpload());
 
 // Cargar middleware
 var md_auth = require('../middlewares/authenticated');

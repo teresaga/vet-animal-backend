@@ -2,14 +2,10 @@
 //modulos
 var fs = require('fs');
 var path = require('path');
-var bcrypt = require('bcrypt-nodejs');
 var moment = require('moment');
 
 //modelos
 var Consultation = require('../models/consultation');
-
-// servicio jwt
-var jwt = require('../services/jwt');
 
 //acciones
 function pruebas(req, res){
@@ -181,7 +177,6 @@ function uploadImage(req, res){
 
 function uploadImage(req, res){
     var consultationId = req.params.id;
-    
     if(req.files){
         //Obtener nombre del archivo
         var archivo = req.files.image;
