@@ -20,7 +20,7 @@ api.post('/consultation',  [md_auth.ensureAuth, md_vet.isVet] , ConsultationCont
 api.get('/consultations',  [md_auth.ensureAuth, md_vet.isVet] , ConsultationController.getConsultations);
 api.get('/history-animal/:id', [md_auth.ensureAuth, md_vet.isVet], ConsultationController.getHistoryOfAnimal);
 api.get('/consultation/:id', ConsultationController.getConsultation);
-api.post('/upload-image-consultation/:id', [md_auth.ensureAuth, md_vet.isVet, md_upload], ConsultationController.uploadImage);
+api.put('/upload-image-consultation/:id', [md_auth.ensureAuth, md_vet.isVet], ConsultationController.uploadImage);
 api.get('/get-image-consultation/:imageFile', ConsultationController.getImageFile);
 
 module.exports = api;
