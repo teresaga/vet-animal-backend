@@ -204,7 +204,7 @@ function uploadImage(req, res){
                     res.status(500).send({message: 'Error al mover archivo'});
                 }else{
                     //Modificar Consulta
-                    Consultation.findByIdAndUpdate(consultationId, {image: file_name}, {new:true}, (err, consultationUpdated) => {
+                    Consultation.findByIdAndUpdate(consultationId, {image: nombreArchivo}, {new:true}, (err, consultationUpdated) => {
                         if(err){
                             res.status(500).send({
                                 message: 'Error al actualizar Consulta'
@@ -214,7 +214,7 @@ function uploadImage(req, res){
                                 res.status(404).send({message: 'No se ha podido actualizar la consulta'});
                             }else{
                                 // Estatus 200 es para respuestas con exito
-                                res.status(200).send({consultation: consultationUpdated, image: file_name});
+                                res.status(200).send({consultation: consultationUpdated, image: nombreArchivo});
                             }
                         }
                     });
