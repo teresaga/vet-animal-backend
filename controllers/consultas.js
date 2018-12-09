@@ -133,7 +133,7 @@ function getConsultations(req, res){
         }
     });
 }
-
+/*
 function uploadImage(req, res){
     var consultationId = req.params.id;
     var file_name = 'No subido...';
@@ -170,6 +170,57 @@ function uploadImage(req, res){
                 }else{
                     res.status(200).send({message: 'Extensión no valida'});
                 }
+            });
+        }
+            
+    }else{
+        res.status(200).send({message: 'No se han subido archivos'});
+    }
+}
+*/
+
+function uploadImage(req, res){
+    var consultationId = req.params.id;
+    
+    if(req.files){
+        //Obtener nombre del archivo
+        var archivo = req.files.image;
+        var nombreCortado = archivo.name.split('.');
+        var extensionArchivo = nombreCortado[nombreCortado.length-1];
+
+        //Solo estas extensiones aceptamos
+        var extensionesValidas = ['png', 'jpg', 'gif', 'jpeg'];
+        
+        if(extensionesValidas.indexOf(extensionArchivo) < 0){
+            res.status(200).send({message: 'Extension no válida, las válidas son png, jpg, gif, jpeg'});
+        }else{
+            //Nombre de archivo personalizado
+            var nombreArchivo = `${ consultationId }-${ new Date().getMilliseconds() }.${ extensionArchivo }`;
+            //Mover Archivo del temporal a un path
+            var path = `./uploads/consultations/${ nombreArchivo }`;
+
+            archivo.mv(path, err =>{
+                if(err){
+                    res.status(500).send({message: 'Error al mover archivo'});
+                }else{
+                    //Modificar Consulta
+                    Consultation.findByIdAndUpdate(consultationId, {image: file_name}, {new:true}, (err, consultationUpdated) => {
+                        if(err){
+                            res.status(500).send({
+                                message: 'Error al actualizar Consulta'
+                            });
+                        }else{
+                            if(!consultationUpdated){
+                                res.status(404).send({message: 'No se ha podido actualizar la consulta'});
+                            }else{
+                                // Estatus 200 es para respuestas con exito
+                                res.status(200).send({consultation: consultationUpdated, image: file_name});
+                            }
+                        }
+                    });
+                    //res.status(200).send({message: 'Archivo movido'});
+                }
+
             });
         }
             
