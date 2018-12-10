@@ -24,6 +24,8 @@ var consultas_routes = require('./routes/consultas');
 var activity_routes = require('./routes/activity');
 var sale_routes = require('./routes/sale');
 
+var corte_routes = require('./routes/corte');
+
 // middlewares de body-parser
 app.use(bodyParser.urlencoded({extended:false}));
 app.use(bodyParser.json());
@@ -56,5 +58,7 @@ app.use('/api', animal_routes);
 app.use('/api', consultas_routes);
 app.use('/api', activity_routes);
 app.use('/api', sale_routes);
+
+app.use('/api', corte_routes);
 
 module.exports = app;

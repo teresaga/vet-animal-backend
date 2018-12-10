@@ -137,6 +137,33 @@ function startActivity(req, res){
 
 }
 
+function cancelActivity(req, res){
+    // parms son los Parametros que se pasan por la url
+    var activityId = req.params.id;
+    var update = req.body;
+
+    update.status = 'C';
+
+    var date = moment({});
+    update.end_date=moment(date).format('YYYY-MM-DD 00:00:00.000[Z]');
+
+    Activity.findByIdAndUpdate(activityId, update, {new:true}, (err, activityUpdated) => {
+        if(err){
+            res.status(500).send({
+                message: 'Error al terminar actividad'
+            });
+        }else{
+            if(!activityUpdated){
+                res.status(404).send({message: 'No se pudo terminar actividad'});
+            }else{
+                // Estatus 200 es para respuestas con exito
+                res.status(200).send({activity: activityUpdated});
+            }
+        }
+    });
+
+}
+
 function getActivities_animalStatusDate(req, res){
     var animalId = req.params.id;
     var pag = req.query.pag || 0;
@@ -340,5 +367,6 @@ module.exports = {
     updateActivity,
     finishActivity,
     startActivity,
+    cancelActivity,
     saveActivity
 };
