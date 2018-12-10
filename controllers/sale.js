@@ -174,6 +174,34 @@ function getSalesDetailsProductos(req, res){
     });
 }
 
+function getSalesSinLimite(req, res){
+    var datestart = req.query.datestart;
+    var dateend = req.query.dateend;
+    Sale.find({$and: [ { date: { $gte: new Date(datestart) } }, { date: { $lte: new Date(dateend) } } ]})
+    .populate({path: 'client'})
+    .exec((err, sales) => {
+        if(err){
+            res.status(500).send({message: 'Error en la petición'});
+        }else{
+            if(!sales){
+                res.status(404).send({message: 'No hay ventas'});
+            }else{
+                Sale.count({$and: [ { date: { $gte: new Date(datestart) } }, { date: { $lte: new Date(dateend) } } ]}, (err, conteo) => {
+                    if(err){
+                        res.status(500).send({message: 'Error en la petición'});
+                    }else{
+                        res.status(200).send({
+                            sales: sales,
+                            total: conteo
+                        });
+                    }
+                });
+            }
+        }
+    });
+    
+}
+
 module.exports = {
     pruebas,
     getSales,
@@ -181,5 +209,6 @@ module.exports = {
     getSalesDetailsProductos,
     getSalesofClient,
     saveSaledetails,
-    saveSale
+    saveSale,
+    getSalesSinLimite
 };

@@ -18,4 +18,6 @@ api.get('/saledetails/:id',[md_auth.ensureAuth, md_admin.isAdmin], SaleControlle
 api.get('/saledetails-product/:id',[md_auth.ensureAuth, md_admin.isAdmin], SaleController.getSalesDetailsProductos);
 api.get('/sales-client/:id',[md_auth.ensureAuth, md_admin.isAdmin], SaleController.getSalesofClient);
 
+api.get('/sales-sinlimite', md_auth.ensureAuth, SaleController.getSalesSinLimite);
+
 module.exports = api;

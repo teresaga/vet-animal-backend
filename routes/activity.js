@@ -12,6 +12,7 @@ api.get('/pruebas-actividades', ActivityController.pruebas);
 api.post('/activity', md_auth.ensureAuth, ActivityController.saveActivity);
 api.put('/update-activity/:id', md_auth.ensureAuth, ActivityController.updateActivity);
 api.put('/finish-activity/:id', md_auth.ensureAuth, ActivityController.finishActivity);
+api.put('/cancel-activity/:id', md_auth.ensureAuth, ActivityController.cancelActivity);
 api.put('/start-activity/:id', md_auth.ensureAuth, ActivityController.startActivity);
 api.get('/activities', md_auth.ensureAuth, ActivityController.getActivities);
 api.get('/activity/:id', md_auth.ensureAuth, ActivityController.getActivity);
