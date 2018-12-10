@@ -20,5 +20,7 @@ api.get('/activities-animal-status-date/:id', md_auth.ensureAuth, ActivityContro
 api.get('/activities-animal-date/:id', md_auth.ensureAuth, ActivityController.getActivities_animalDate);
 api.get('/activities-status-date/', md_auth.ensureAuth, ActivityController.getActivities_statusDate);
 api.get('/activities-date/', md_auth.ensureAuth, ActivityController.getActivities_date);
+api.get('/activities-date-worker/', md_auth.ensureAuth, ActivityController.getActivities_dateWorker);
+api.get('/activities-animal-date-worker/:id', md_auth.ensureAuth, ActivityController.getActivities_animalDateWorker);
 
 module.exports = api;

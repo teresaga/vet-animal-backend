@@ -356,6 +356,77 @@ function getActivities(req, res){
         }
     });
 }
+
+function getActivities_animalDateWorker(req, res){
+    var animalId = req.params.id;
+    var pag = req.query.pag || 0;
+    pag = Number(pag);
+    var datestart = req.query.datestart;
+    var worker = req.query.worker;
+    var dateend = req.query.dateend;
+    Activity.find({animal: animalId, worker: worker, $and: [ { date: { $gte: new Date(datestart) } }, { date: { $lte: new Date(dateend) } } ], status: {$nin: [ "T", "C" ]} })
+    .populate({path: 'client'})
+    .populate({path: 'worker'})
+    .populate({path: 'service'})
+    .populate({path: 'animal'})
+    .skip(pag)
+    .limit(5)
+    .exec((err, activities) => {
+        if(err){
+            res.status(500).send({message: 'Error en la petición'});
+        }else{
+            if(!activities){
+                res.status(404).send({message: 'No hay actividades'});
+            }else{
+                Activity.count({animal: animalId, worker: worker, $and: [ { date: { $gte: new Date(datestart) } }, { date: { $lte: new Date(dateend) } } ], status: {$nin: [ "T", "C" ]}}, (err, conteo) => {
+                    if(err){
+                        res.status(500).send({message: 'Error en la petición'});
+                    }else{
+                        res.status(200).send({
+                            activities: activities,
+                            total: conteo
+                        });
+                    }
+                });
+            }
+        }
+    });
+}
+
+function getActivities_dateWorker(req, res){
+    var pag = req.query.pag || 0;
+    pag = Number(pag);
+    var datestart = req.query.datestart;
+    var worker = req.query.worker;
+    var dateend = req.query.dateend;
+    Activity.find({worker: worker, $and: [ { date: { $gte: new Date(datestart) } }, { date: { $lte: new Date(dateend) } } ], status: {$nin: [ "T", "C" ]} })
+    .populate({path: 'client'})
+    .populate({path: 'worker'})
+    .populate({path: 'service'})
+    .populate({path: 'animal'})
+    .skip(pag)
+    .limit(5)
+    .exec((err, activities) => {
+        if(err){
+            res.status(500).send({message: 'Error en la petición'});
+        }else{
+            if(!activities){
+                res.status(404).send({message: 'No hay actividades'});
+            }else{
+                Activity.count({worker: worker, $and: [ { date: { $gte: new Date(datestart) } }, { date: { $lte: new Date(dateend) } } ], status: {$nin: [ "T", "C" ]}}, (err, conteo) => {
+                    if(err){
+                        res.status(500).send({message: 'Error en la petición'});
+                    }else{
+                        res.status(200).send({
+                            activities: activities,
+                            total: conteo
+                        });
+                    }
+                });
+            }
+        }
+    });
+}
 module.exports = {
     pruebas,
     getActivity,
@@ -364,6 +435,8 @@ module.exports = {
     getActivities_animalDate,
     getActivities_statusDate,
     getActivities_date,
+    getActivities_dateWorker,
+    getActivities_animalDateWorker,
     updateActivity,
     finishActivity,
     startActivity,
