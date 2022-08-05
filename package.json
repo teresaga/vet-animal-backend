@@ -17,7 +17,7 @@
     "express-fileupload": "^1.0.0",
     "jwt-simple": "^0.5.5",
     "moment": "^2.22.2",
-    "mongoose": "^5.3.7"
+    "mongoose": "^5.7.5"
   },
   "devDependencies": {
     "nodemon": "^1.18.5"
